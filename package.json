@@ -22,7 +22,7 @@
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run rebuild",
-    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "test": "lb-mocha --timeout 10000 --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t application .",
@@ -61,6 +61,7 @@
     "dotenv": "^16.0.0",
     "jsonwebtoken": "^8.5.1",
     "loopback-connector-postgresql": "^5.5.0",
+    "luxon": "^2.3.1",
     "simple-node-logger": "^21.8.12",
     "tslib": "^2.0.0"
   },
@@ -69,7 +70,9 @@
     "@loopback/eslint-config": "^12.0.1",
     "@loopback/testlab": "^4.0.1",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/luxon": "^2.3.1",
     "@types/node": "^10.17.60",
+    "@types/uuid": "^8.3.4",
     "eslint": "^8.6.0",
     "source-map-support": "^0.5.21",
     "typescript": "~4.5.4"
