@@ -2,7 +2,7 @@ import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {MainDataSource} from '../datasources';
 import {Users, UsersRelations} from '../models';
-import {ErrorHandler, generateUuid, getTimestamp} from '../utils';
+import {generateUuid, getTimestamp} from '../utils';
 
 export class UsersRepository extends DefaultCrudRepository<
   Users,
@@ -29,7 +29,11 @@ export class UsersRepository extends DefaultCrudRepository<
   async isEmailAlreadyExists(email_address:string){
     const result = await this.findOne({where:{email_address:email_address,deleted_at:null}})
 
-    if(result) ErrorHandler.badRequest('Email Already Exists')
-    return
+    if(result) return true
+    return false
+  }
+
+  async getUserByEmailAddress(email_address:string){
+    return this.findOne({where:{email_address:email_address,deleted_at:null}})
   }
 }

@@ -38,4 +38,28 @@ describe('Auth', () => {
       .expect(422)
       .expect('Content-Type', /application\/json/);
   });
+
+  it('Login - Success', async () => {
+    await client
+      .post('/api/v1/auth/login')
+      .send({email_address: email_address, password: '1234567890'})
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  it('Login - Invalid Email', async () => {
+    await client
+      .post('/api/v1/auth/login')
+      .send({email_address: 'dummyTest@test.com', password: '1234567890'})
+      .expect(404)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  it('Login - wrong password', async () => {
+    await client
+      .post('/api/v1/auth/login')
+      .send({email_address: email_address, password: '12345670'})
+      .expect(401)
+      .expect('Content-Type', /application\/json/);
+  });
 });

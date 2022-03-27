@@ -23,4 +23,8 @@ export class ErrorHandler {
   static badRequest(message: string) {
     return this.handleError(400, message);
   }
+
+  static notFound(message: string) {
+    return this.handleError(404, message);
+  }
 }

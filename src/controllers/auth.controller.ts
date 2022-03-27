@@ -2,10 +2,10 @@
 
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
-import {post, requestBody} from '@loopback/rest';
+import {get, post, requestBody} from '@loopback/rest';
 import {UsersRepository} from '../repositories';
 import {JWTService} from '../services';
-import {hashPassword} from '../utils';
+import {comparePassword, ErrorHandler, hashPassword} from '../utils';
 // import {inject} from '@loopback/core';
 
 export class AuthController {
@@ -35,11 +35,47 @@ export class AuthController {
       password: string;
     },
   ) {
-    await this.UserRepository.isEmailAlreadyExists(userRegister.email_address);
+    const isEmailAlreadyExists = await this.UserRepository.isEmailAlreadyExists(
+      userRegister.email_address,
+    );
+
+    if (isEmailAlreadyExists) ErrorHandler.badRequest('Email Already Exists');
 
     userRegister.password = await hashPassword(userRegister.password);
 
     const createdUser = await this.UserRepository.create(userRegister);
     return {token: await this.jwtService.generateToken(createdUser.user_uuid)};
   }
+
+  @post('/api/v1/auth/login')
+  async loginUser(
+    @requestBody({
+      content: {},
+    })
+    user: {
+      email_address: string;
+      password: string;
+    },
+  ) {
+    const userExists = await this.UserRepository.getUserByEmailAddress(
+      user.email_address,
+    );
+
+    if (!userExists) {
+      ErrorHandler.notFound('User Not Found');
+      return;
+    }
+
+    const isPasswordMatch = await comparePassword(
+      user.password,
+      userExists.password,
+    );
+
+    if (!isPasswordMatch) ErrorHandler.unauthorized('Invalid Credentials');
+
+    return {token: await this.jwtService.generateToken(userExists?.user_uuid)};
+  }
+
+  @get('/api/v1/auth/profile')
+  async getUserProfile() {}
 }
