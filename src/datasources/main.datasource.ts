@@ -2,17 +2,6 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 import {DataSourceConfig} from '../config';
 
-const config = {
-  name: 'main',
-  connector: 'postgresql',
-  url: DataSourceConfig.getDataSourceUrl(),
-  host: '',
-  port: 0,
-  user: '',
-  password: '',
-  database: '',
-};
-
 // Observe application's life cycle to disconnect the datasource when
 // application is stopped. This allows the application to be shut down
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
@@ -23,11 +12,29 @@ export class MainDataSource
   implements LifeCycleObserver
 {
   static dataSourceName = 'main';
-  static readonly defaultConfig = config;
+  static readonly defaultConfig = {
+    name: 'main',
+    connector: 'postgresql',
+    url: DataSourceConfig.getDataSourceUrl(),
+    host: '',
+    port: 0,
+    user: '',
+    password: '',
+    database: '',
+  };
 
   constructor(
     @inject('datasources.config.main', {optional: true})
-    dsConfig: object = config,
+    dsConfig: object = {
+      name: 'main',
+      connector: 'postgresql',
+      url: DataSourceConfig.getDataSourceUrl(),
+      host: '',
+      port: 0,
+      user: '',
+      password: '',
+      database: '',
+    },
   ) {
     super(dsConfig);
   }

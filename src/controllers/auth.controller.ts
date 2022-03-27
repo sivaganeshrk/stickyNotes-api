@@ -4,6 +4,7 @@ import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {get, post, requestBody} from '@loopback/rest';
+import {Users} from '../models';
 import {UsersRepository} from '../repositories';
 import {JWTService} from '../services';
 import {comparePassword, ErrorHandler, hashPassword} from '../utils';
@@ -79,8 +80,9 @@ export class AuthController {
   @authenticate('jwt')
   @get('/api/v1/auth/profile')
   async getUserProfile(
-    @inject(AuthenticationBindings.CURRENT_USER) user: {user_uuid: string},
+    @inject(AuthenticationBindings.CURRENT_USER) user: Users,
   ) {
-    return this.UserRepository.getUserByUuid(user.user_uuid);
+    delete user.id;
+    return user;
   }
 }
