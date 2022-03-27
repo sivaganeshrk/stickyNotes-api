@@ -41,8 +41,11 @@ export class Users extends Entity {
 
   @property({
     type: 'number',
+    default: null,
   })
   deleted_at?: number;
+
+  [prop: string]: any;
 
   constructor(data?: Partial<Users>) {
     super(data);

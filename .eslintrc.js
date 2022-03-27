@@ -2,7 +2,7 @@ module.exports = {
   extends: '@loopback/eslint-config',
   rules: {
     '@typescript-eslint/naming-convention': [
-      'error',
+      'off',
       {
         selector: 'default',
         format: ['camelCase', 'PascalCase', 'snake_case'],

@@ -1,10 +1,11 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
+import {DataSourceConfig} from '../config';
 
 const config = {
   name: 'main',
   connector: 'postgresql',
-  url: 'postgres://xbdjkpti:aqVbwA_En_0sx47nuV7QQBd2dnWl818N@raja.db.elephantsql.com/xbdjkpti',
+  url: DataSourceConfig.getDataSourceUrl(),
   host: '',
   port: 0,
   user: '',

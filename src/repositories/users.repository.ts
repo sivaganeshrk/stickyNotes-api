@@ -13,4 +13,11 @@ export class UsersRepository extends DefaultCrudRepository<
   ) {
     super(Users, dataSource);
   }
+
+  async isEmailAlreadyExists(email_address:string){
+    const result = await this.findOne({where:{email_address:email_address,deleted_at:null}})
+
+    if(result) return true
+    return false
+  }
 }

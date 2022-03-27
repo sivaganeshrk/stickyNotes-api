@@ -19,4 +19,8 @@ export class ErrorHandler {
       'Something Went wrong, please try again later',
     );
   }
+
+  static badRequest(message: string) {
+    return this.handleError(400, message);
+  }
 }
