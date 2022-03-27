@@ -1,3 +1,7 @@
+import {
+  AuthenticationComponent,
+  registerAuthenticationStrategy,
+} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
@@ -8,6 +12,7 @@ import {
 } from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {JWTStrategy} from './authentication/jwt';
 import {MySequence} from './sequence';
 import {JWTService} from './services/jwt.service';
 
@@ -22,6 +27,8 @@ export class StickyNotesApplication extends BootMixin(
     // Set up the custom sequence
     this.sequence(MySequence);
     this.bind('services.jwt.service').toClass(JWTService);
+    this.component(AuthenticationComponent);
+    registerAuthenticationStrategy(this, JWTStrategy);
     // Set up default home page
     this.static('/', path.join(__dirname, '../public'));
 

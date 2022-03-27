@@ -36,4 +36,8 @@ export class UsersRepository extends DefaultCrudRepository<
   async getUserByEmailAddress(email_address:string){
     return this.findOne({where:{email_address:email_address,deleted_at:null}})
   }
+
+  async getUserByUuid(user_uuid:string){
+    return this.findOne({where:{user_uuid:user_uuid,deleted_at:null},fields:{id:false,password:false,deleted_at:false}})
+  }
 }

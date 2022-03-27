@@ -1,5 +1,6 @@
 // Uncomment these imports to begin using these cool features!
 
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {get, post, requestBody} from '@loopback/rest';
@@ -75,7 +76,11 @@ export class AuthController {
 
     return {token: await this.jwtService.generateToken(userExists?.user_uuid)};
   }
-
+  @authenticate('jwt')
   @get('/api/v1/auth/profile')
-  async getUserProfile() {}
+  async getUserProfile(
+    @inject(AuthenticationBindings.CURRENT_USER) user: {user_uuid: string},
+  ) {
+    return this.UserRepository.getUserByUuid(user.user_uuid);
+  }
 }
