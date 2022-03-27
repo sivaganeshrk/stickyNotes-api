@@ -1,0 +1,6 @@
+node_modules/
+dist/
+coverage/
+.eslintrc.js
+models/
+/src/controllers/ping.controller.ts
