@@ -5,7 +5,7 @@ import {
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
-import {RestApplication} from '@loopback/rest';
+import {AjvFormat, RestApplication, RestTags} from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -15,6 +15,10 @@ import path from 'path';
 import {JWTStrategy} from './authentication/jwt';
 import {MySequence} from './sequence';
 import {JWTService} from './services/jwt.service';
+import {
+  stringNumberAndSomeSpecialValidation,
+  uuidValidation,
+} from './validation';
 
 export {ApplicationConfig};
 
@@ -29,6 +33,19 @@ export class StickyNotesApplication extends BootMixin(
     this.bind('services.jwt.service').toClass(JWTService);
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTStrategy);
+
+    // uuid validation
+    this.bind<AjvFormat>(`ajv.formats.${uuidValidation.name}`)
+      .to(uuidValidation)
+      .tag(RestTags.AJV_FORMAT);
+
+    // String Number And '",._ - Validation
+    this.bind<AjvFormat>(
+      `ajv.formats.${stringNumberAndSomeSpecialValidation.name}`,
+    )
+      .to(stringNumberAndSomeSpecialValidation)
+      .tag(RestTags.AJV_FORMAT);
+
     // Set up default home page
     this.static('/', path.join(__dirname, '../public'));
 
